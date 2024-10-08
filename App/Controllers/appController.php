@@ -1,6 +1,6 @@
 <?php
 
-class MainCntroller {
+class appController {
     public function index() {
         //cridar a la vista corresponent
         $this -> render("prova");
