@@ -23,7 +23,7 @@ class Router
 
         if (!file_exists($controllerPath)) {
             //si no existeix el controlador, reiniciem variables als valors per defecte
-            $this->controller = "defaultController";
+            $this->controller = "errorController";
             $controllerPath = "App/Controllers/" . $this->controller . ".php";;
         }
         require_once($controllerPath); //Carreguem el controller
