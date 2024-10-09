@@ -7,7 +7,7 @@ if (!isset($_SESSION)) {
     session_start();
 }
 
-echo "Estic al índex";
+
 
 $myRouter = new Router();
 $myRouter->run();
