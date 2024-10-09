@@ -2,61 +2,49 @@
 
 namespace App;
 
-class Router {
+class Router
+{
 
     private $controller;
     private $method;
 
-
-    public function __construct(){
+    public function __construct()
+    {
         $this->matchRoute();
     }
-    
 
-    public function matchRoute(){
-        //Aquesta funció ha de carregar el controller
-        //que li passem per la url
-        //Ha de carregar al metode corresponent de la classe del
-        //Contorller
-        //Farem servir la variable superglobal $_SESSION['REQUEST_URI']
-        $url_array= explode('/',$_SERVER['REQUEST_URI']);
-        print_r($url_array);
-        //estic assignant el nom del controller
-        $this->controller = !empty($url_array[1])? $url_array[1] : 'main';
-        $this->controller=$this->controller."Controller";
-        $controllerPath = "App/Controllers/".$this->controller.".php";
+    public function matchRoute()
+    {
+        $url_array = explode('/', $_SERVER['REQUEST_URI']); //guardem la url en un array
 
-        if(file_exists($controllerPath)) {
-            require_once($controllerPath);
-        } else {
-            die("Error: no existeix la pagina");
+        $this->controller = !empty($url_array[1]) ? $url_array[1] : 'default';
+        $this->controller = $this->controller . "Controller"; //gaurdem el nom del controller
+        $controllerPath = "App/Controllers/" . $this->controller . ".php"; //guardem la ruta del controller
+
+        if (!file_exists($controllerPath)) {
+            //si no existeix el controlador, reiniciem variables als valors per defecte
+            $this->controller = "defaultController";
+            $controllerPath = "App/Controllers/" . $this->controller . ".php";;
         }
+        require_once($controllerPath); //Carreguem el controller
 
         if (isset($url_array[2])) {
-            $this->method=!empty($url_array[2])? $url_array[2] : 'index';
+            //si tenim una segon valor a la url inicialitzem metode
+            $this->method = !empty($url_array[2]) ? $url_array[2] : 'index';
+        } else {
+            $this->method = 'index';
         }
-
-
     }
 
-    public function run (){
-        //Aquesta funció crida al controller i el seu metode
-        if (class_exists($this->controller)) {
-            $controller = new $this->controller();
-
-            if(method_exists($controller,$this->method)) {
-                $method = $this->method;
-                $controller->$method;
-            } else {
-                die("Erros: metode no existeix");
-            }
+    public function run()
+    {
+        $controller = $this->controller;
+        $c = new  $controller();
+        if (!method_exists($controller, $this->method)) {
+            //si no existeix el metode asociem el valor per defecte
+            $method = 'index';
         }
-
-        
+        $method = $this->method;
+        $c->$method();
     }
-        
-    
-
-
-
 }
