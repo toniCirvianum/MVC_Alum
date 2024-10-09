@@ -6,7 +6,7 @@ class defaultController extends Controller {
         
         // echo"estic al controller default";
         $params['title']="Home";
-        $this->render('mp/index',$params,'main');
+        $this->render('home/index',$params,'main');
     }
 
 

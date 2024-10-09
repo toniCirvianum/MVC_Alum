@@ -34,14 +34,20 @@
                 echo "<td>" . $mp['id'] . "</td>";
                 echo "<td>" . $mp['num_mp'] . "</td>";
                 echo "<td>" . $mp['nom_mp'] . "</td>";
-                echo "<td>";
+                echo "<td>
+                <a name='' id='' class='btn btn-danger' href='#" . $mp['id'] . "' role='button'>Remove</a>
+                <a name='' id='' class='btn btn-primary' href='#" . $mp['id'] . "' role='button'>Update</a>
+                <a name='' id='' class='btn btn-success' href='#" . $mp['id'] . "' role='button'>+Uf</a>
+        
+                echo </td>";
+                echo "</tr>";
             }
 
 
 
             ?>
 
-            
+
 
 
 
