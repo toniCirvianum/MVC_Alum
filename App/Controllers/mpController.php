@@ -30,8 +30,11 @@ class mpController extends Controller {
         $this->index();
     }
 
-    public function destroy() {
-
+    public function destroy($myId) {
+        $mpId = (int)$myId[0];
+        $model = new Mp();
+        $model->removeItemById($mpId);
+        $this->index();
     }
 
     public function update() {
