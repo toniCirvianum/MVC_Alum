@@ -7,6 +7,7 @@ class Router
 
     private $controller;
     private $method;
+    private $values=[];
 
     public function __construct()
     {
@@ -34,6 +35,17 @@ class Router
         } else {
             $this->method = 'index';
         }
+
+
+        $items = count($url_array);
+
+        if ($items >3) {
+            for ($i=3; $i < $items; $i++) { 
+                $this->values[$i-3]=$url_array[$i];
+            }
+        }
+
+        
     }
 
     public function run()
@@ -42,9 +54,12 @@ class Router
         $c = new  $controller();
         if (!method_exists($controller, $this->method)) {
             //si no existeix el metode asociem el valor per defecte
-            $method = 'index';
+            $this->method = 'index';
         }
         $method = $this->method;
-        $c->$method();
+
+        isset($this->values) ? $c->$method($this->values) : $c->$method();
+
+        
     }
 }
