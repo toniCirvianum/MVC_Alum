@@ -7,12 +7,10 @@ class userController extends Controller
 
     public function index()
     {
-        //flas s'utilitza per mostrar missatge a la vista
-        // $params['message_view'] = $_SESSION['message_view'];
-        // //un cop desada a params, la esborrem per tenir-la disponible en altres vistes
-        // unset($_SESSION['message_view']);
+        
         $params['title'] = "Login";
         $this->render("user/login", $params, "site");
+        unset($params);
     }
 
     public function login()
@@ -20,6 +18,9 @@ class userController extends Controller
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             //Recuperem les dades via post
+            echo "<pre>";
+            print_r($_SESSION['users']);
+            echo "</pre>";
             $username = $_POST['username'] ?? null;
             $password = $_POST['pass'] ?? null;
             //Instanciem un nou model per comprovar credencials
@@ -31,13 +32,35 @@ class userController extends Controller
             } else {
                 //Si son corectes desem l'usuari logejat
                 $_SESSION['user'] = $user->login($username, $password);
-                //Inicialitzem la vista de l'aplicació
-                $mpModel = new Mp();
-                $params['title'] = 'Mps';
-                $params['llista'] = $mpModel->getAll();
-                $this->render('mp/index', $params, 'main');
+                echo "<pre>";
+                print_r($_SESSION['user']);
+                echo "</pre>";
+                if (!$_SESSION['user']['verified']) {
+                    $params['title'] = "Login";
+                    $params['message_view'] = "Usuari no verificat";
+                    $this->render("user/index", $params, "site");
+                } else {
+                    //Inicialitzem la vista de l'aplicació
+                    $mpModel = new Mp();
+                    $params['title'] = 'Mps';
+                    $params['llista'] = $mpModel->getAll();
+                    $this->render('mp/index', $params, 'main');
+                }
             }
         }
+    }
+
+    public function verify()
+    {
+
+        $userModel = new User();
+        $user = $userModel->getUserbyUsername($_GET['username']);
+        if ($user['token'] == $_GET['token']) {
+            $user['verified'] = true;
+        }
+        $userModel->update($user);
+        $this->render('user/login', [], 'site');
+
     }
 
     public function logout()
@@ -47,7 +70,7 @@ class userController extends Controller
         // header('Location: /user/login');
     }
 
-    public function updateView()
+    public function register()
     {
         $params['title'] = "Register";
         $this->render('/user/register', $params, 'main');
@@ -72,17 +95,23 @@ class userController extends Controller
                 $params['mail'] = validarMail($newUser['mail']);
 
                 if (is_null($params['errorUsername']) && is_null($params['password']) && is_null($params['mail'])) {
+                    $user = new Mp;
+                    $user->create($newUser);
 
+                    echo "<pre>";
+                    $_SESSION['users'];
+                    echo "</pre>";
                     $mailer = new Mailer();
                     $mailer->mailServerSetup();
-                    $mailer->addRec(array($newUsewr['mail']));
-                    $mailer->addVerifyContent($user);
+                    $mailer->addRec(array($newUser['mail']));
+                    $mailer->addVerifyContent($newUser);
                     $mailer->send();
 
-                    $params['title']="login";
-                    $this->render('/user/login',$params,'main');
-
-
+                    echo "<pre>";
+                    print_r($newUser);
+                    echo "</pre>";
+                   // $this->index();
+                    // header('Location: /user/login');
                 } else {
                     $this->render('/user/register', $params, 'main');
                 }
