@@ -28,12 +28,18 @@ $users = [
         'id'=>0,
         'username'=>'admin',
         'password'=>'123',
+        'mail'=>'mail@mail.es',
+        'token'=> 'EREDTRTGTFF',
+        'verified'=>true,
         'admin'=>true
     ],
     [
         'id'=>0,
         'username'=>'raquel',
         'password'=>'123',
+        'mail'=>'mail@mail.es',
+        'token'=> 'EREDTRTGTFF',
+        'verified'=>true,
         'admin'=>false
     ]
 ];

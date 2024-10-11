@@ -20,6 +20,14 @@ class User extends Orm {
         } return null;
     }
 
+    public function getUserbyUsername($name) {
+        return $user;
+    }
+
+    public function update($user) {
+        return $user;
+    }
+
 
 
 }

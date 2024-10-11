@@ -1,5 +1,5 @@
 <div class="signin col-11 col-md-9 col-lg-7 col-xl-5 mx-auto border p-4 bg-light mt-4">
-    <form action="/user/login/" method="post">
+    <form action="/user/newUser/" method="post">
         <h2 class="text-success">Register</h2>
 
         <div class="mb-3">

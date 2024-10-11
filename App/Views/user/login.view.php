@@ -25,7 +25,7 @@
         <button type="submit" class="btn btn-primary">Submit</button>
         <div class="mb-3">
             <label for="username" class="form-label">
-                <a href="/user/updateView">Registra't</a>
+                <a href="/user/register">Registra't</a>
             </label>
         </div>
 
