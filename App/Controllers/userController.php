@@ -7,7 +7,7 @@ class userController extends Controller
 
     public function index()
     {
-        
+
         $params['title'] = "Login";
         $this->render("user/login", $params, "site");
         unset($params);
@@ -18,9 +18,6 @@ class userController extends Controller
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             //Recuperem les dades via post
-            echo "<pre>";
-            print_r($_SESSION['users']);
-            echo "</pre>";
             $username = $_POST['username'] ?? null;
             $password = $_POST['pass'] ?? null;
             //Instanciem un nou model per comprovar credencials
@@ -32,13 +29,11 @@ class userController extends Controller
             } else {
                 //Si son corectes desem l'usuari logejat
                 $_SESSION['user'] = $user->login($username, $password);
-                echo "<pre>";
-                print_r($_SESSION['user']);
-                echo "</pre>";
                 if (!$_SESSION['user']['verified']) {
                     $params['title'] = "Login";
                     $params['message_view'] = "Usuari no verificat";
-                    $this->render("user/index", $params, "site");
+                    // $this->render("user/index", $params, "main");
+                    $this->index();
                 } else {
                     //Inicialitzem la vista de l'aplicació
                     $mpModel = new Mp();
@@ -60,7 +55,6 @@ class userController extends Controller
         }
         $userModel->update($user);
         $this->render('user/login', [], 'site');
-
     }
 
     public function logout()
@@ -80,37 +74,32 @@ class userController extends Controller
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (isset($_POST['username']) && isset($_POST['pass']) && isset($_POST['mail'])) {
-                $newUser = [
-                    'id' => $_SESSION['id_user']++,
-                    'username' => $_POST['username'],
-                    'password' => $_POST['pass'],
-                    'mail' => $_POST['mail'],
-                    'token' => generateToken(),
-                    'verified' => false,
-                    'admin' => false
-                ];
-
-                $params['errorUsername'] = validarUsername($newUser['username']);
-                $params['password'] = validarPassword($newUser['password']);
-                $params['mail'] = validarMail($newUser['mail']);
+               
+                $params['errorUsername'] = validarUsername($_POST['username']);
+                $params['password'] = validarPassword($_POST['pass']);
+                $params['mail'] = validarMail($_POST['mail']);
 
                 if (is_null($params['errorUsername']) && is_null($params['password']) && is_null($params['mail'])) {
-                    $user = new Mp;
+                    $user = new User;
+                    $newUser = [
+                        'id' => $_SESSION['id_user']++,
+                        'username' => $_POST['username'],
+                        'password' => $_POST['pass'],
+                        'mail' => $_POST['mail'],
+                        'token' => generateToken(),
+                        'verified' => false,
+                        'admin' => false
+                    ];
                     $user->create($newUser);
 
-                    echo "<pre>";
-                    $_SESSION['users'];
-                    echo "</pre>";
                     $mailer = new Mailer();
                     $mailer->mailServerSetup();
                     $mailer->addRec(array($newUser['mail']));
                     $mailer->addVerifyContent($newUser);
                     $mailer->send();
 
-                    echo "<pre>";
-                    print_r($newUser);
-                    echo "</pre>";
-                   // $this->index();
+
+                    $this->index();
                     // header('Location: /user/login');
                 } else {
                     $this->render('/user/register', $params, 'main');

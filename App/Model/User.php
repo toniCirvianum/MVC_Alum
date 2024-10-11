@@ -21,6 +21,7 @@ class User extends Orm {
     }
 
     public function getUserbyUsername($name) {
+        $user=[];
         return $user;
     }
 
