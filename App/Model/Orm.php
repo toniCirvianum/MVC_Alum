@@ -20,9 +20,11 @@
         }
 
         public function removeItemById($id){
+
             foreach ($_SESSION[$this->model] as $key => $item) {
                 if($item['id']==$id){
                     unset($_SESSION[$this->model][$key]);
+
                     return $item;
                 }
             }
@@ -33,6 +35,8 @@
             //$_SESSION[$this->model][] = $item;
             array_push($_SESSION[$this->model],$item);
         }
+
+
 
         public function getAll(){
             return $_SESSION[$this->model];
@@ -51,6 +55,8 @@
         public function reset(){
             unset($_SESSION[$this->model]);
         }
+
+
 
 
 

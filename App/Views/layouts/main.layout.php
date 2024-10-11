@@ -21,7 +21,13 @@
     <header>
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
-                <a class="btn btn-primary mx.-auto" href="../mp/index">Moduls</a>
+                <a class="btn btn-primary mx.-auto" href="/mp/index">Moduls</a>
+                <?php
+                    if (isset($_SESSION['user'])) {
+                        echo '<a class="btn btn-primary mx.-auto" href="/user/logout">Logout</a>';
+                    }
+
+                ?>
                 
 
             </div>

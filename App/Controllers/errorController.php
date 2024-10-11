@@ -1,6 +1,6 @@
 <?php
 
-class errorController {
+class errorController extends Controller {
     public function index() {
         //cridar a la vista corresponent
         

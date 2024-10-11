@@ -1,4 +1,4 @@
-<form action="/mp/store" method="post" class="col-11 col-sm-9 col-md-7 col-lg-5 mx-auto border bg-light p-4 mt-4">
+<form action="/mp/storeNew" method="post" class="col-11 col-sm-9 col-md-7 col-lg-5 mx-auto border bg-light p-4 mt-4">
     <h2>New MP</h2>
     <div class="mb-3">
         <label for="num_mp" class="form-label">Num MP</label>
@@ -29,17 +29,20 @@
         <tbody>
 
             <?php
+
             foreach ($params['llista'] as $mp) {
                 echo "<tr>";
                 echo "<td>" . $mp['id'] . "</td>";
                 echo "<td>" . $mp['num_mp'] . "</td>";
                 echo "<td>" . $mp['nom_mp'] . "</td>";
-                echo "<td>
+                if ($_SESSION['user']['admin']) {
+                    echo "<td>
                 <a name='' id='' class='btn btn-danger' href='/mp/destroy/" . $mp['id'] . "' role='button'>Remove</a>
-                <a name='' id='' class='btn btn-primary' href='#" . $mp['id'] . "' role='button'>Update</a>
+                <a name='' id='' class='btn btn-primary' href='/mp/update/" . $mp['id'] . "' role='button'>Update</a>
                 <a name='' id='' class='btn btn-success' href='#" . $mp['id'] . "' role='button'>+Uf</a>";
-        
-                echo "</td>";
+
+                    echo "</td>";
+                }
                 echo "</tr>";
             }
 

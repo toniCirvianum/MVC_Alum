@@ -2,12 +2,25 @@
 
 class defaultController extends Controller {
     public function index($values=null) {
-        //cridar a la vista corresponent
-        print_r($values);
-        // echo"estic al controller default";
-        // $params['title']="Home";
-        // $this->render('home/index',$params,'main');
+        {
+
+            if (!isset($_SESSION['user'])) {
+                $params['title'] = 'Login';
+                $this->render('user/login', $params, 'site');
+            } else {
+                $mpModel = new Mp();
+                $params['title'] = 'Mps';
+                $params['llista'] = $mpModel->getAll();
+                $this->render('mp/index', $params, 'main');
+            }
+
+            
+    
+    
+        }
     }
+
+
 
 
 
